@@ -18,8 +18,5 @@ export class JobService {
     return jobs.map((job) => {
       return new JobDto(job);
     });
-
-    // console.log(result);
-    // return result;
   }
 }
