@@ -1,11 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { IsNumber, IsString } from 'class-validator';
+import { CompanyEntity } from 'src/api/company/entities/company.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({
-  name: 'JOBS',
+  name: 'JOB',
 })
-export class JobsEntity extends BaseEntity {
+export class JobEntity extends BaseEntity {
   @ApiProperty({
     example: '1',
     description: '채용공고 id',
@@ -15,8 +23,15 @@ export class JobsEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @IsNumber()
-  @Column({ type: 'int', comment: '기업 id', nullable: false })
+  // @IsNumber()
+  // @Column({ type: 'int', comment: '기업 id', nullable: false })
+  @ManyToOne(() => CompanyEntity, (company: CompanyEntity) => company.id, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'companyId',
+    referencedColumnName: 'id',
+  })
   companyId: number;
 
   @IsString()

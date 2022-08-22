@@ -7,7 +7,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { UserModule } from './api/user/user.module';
 import { CompanyModule } from './api/company/company.module';
 import { ApplyModule } from './api/apply/apply.module';
-import { JobsModule } from './api/jobs/jobs.module';
+import { JobModule } from './api/job/job.module';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { JobsModule } from './api/jobs/jobs.module';
     UserModule,
     CompanyModule,
     ApplyModule,
-    JobsModule,
+    JobModule,
   ],
   controllers: [AppController],
   providers: [AppService],
