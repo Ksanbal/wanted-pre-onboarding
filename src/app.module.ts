@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmModuleOptions } from './config/typeorm.config';
+import { typeOrmAsyncModuleOptions } from './config/typeorm.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
@@ -12,7 +12,7 @@ import { JobModule } from './api/job/job.module';
 @Module({
   imports: [
     // TypeORM
-    TypeOrmModule.forRootAsync(typeOrmModuleOptions),
+    TypeOrmModule.forRootAsync(typeOrmAsyncModuleOptions),
     UserModule,
     CompanyModule,
     ApplyModule,

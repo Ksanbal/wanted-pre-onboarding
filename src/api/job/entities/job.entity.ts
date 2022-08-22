@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
-import { ApplyEntity } from 'src/api/apply/entities/apply.entity';
-import { CompanyEntity } from 'src/api/company/entities/company.entity';
+import { ApplyEntity } from '../../apply/entities/apply.entity';
+import { CompanyEntity } from '../../company/entities/company.entity';
 import {
   BaseEntity,
   Column,
@@ -32,7 +32,7 @@ export class JobEntity extends BaseEntity {
     name: 'company_id',
     referencedColumnName: 'id',
   })
-  company: number;
+  company: CompanyEntity;
 
   @IsString()
   @Column({ type: 'varchar', comment: '채용포지션', nullable: false })

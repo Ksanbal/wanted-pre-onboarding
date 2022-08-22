@@ -1,7 +1,7 @@
+import { ApplyEntity } from '../../apply/entities/apply.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { ApplyEntity } from 'src/api/apply/entities/apply.entity';
 import {
   BaseEntity,
   Column,
@@ -30,7 +30,12 @@ export class UserEntity extends BaseEntity {
   })
   @IsString()
   @IsNotEmpty()
-  @Column({ type: 'varchar', comment: '사용자명', nullable: false })
+  @Column({
+    type: 'varchar',
+    comment: '사용자명',
+    nullable: false,
+    unique: true,
+  })
   name: string;
 
   @OneToMany(() => ApplyEntity, (apply: ApplyEntity) => apply.user, {

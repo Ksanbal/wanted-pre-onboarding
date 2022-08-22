@@ -1,19 +1,25 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ApplyEntity } from 'src/api/apply/entities/apply.entity';
-import { CompanyEntity } from 'src/api/company/entities/company.entity';
-import { JobEntity } from 'src/api/job/entities/job.entity';
-import { UserEntity } from 'src/api/user/entities/user.entity';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
-export const typeOrmModuleOptions = {
+export const typeOrmAsyncModuleOptions = {
   useFactory: async (): Promise<TypeOrmModuleOptions> => ({
     namingStrategy: new SnakeNamingStrategy(),
     type: 'sqlite',
-    entities: [UserEntity, CompanyEntity, JobEntity, ApplyEntity],
+    entities: [__dirname + '/../**/*.entity.{js,ts}'],
     database: 'wanted_pre_onboarding.db',
     synchronize: true, //! set 'false' in production
     autoLoadEntities: true,
     logging: true,
-    keepConnectionAlive: true,
   }),
+};
+
+// Seeding을 위한 설정
+export const typeOrmModuleOptions = {
+  namingStrategy: new SnakeNamingStrategy(),
+  type: 'sqlite',
+  entities: [__dirname + '/../**/*.entity.{js,ts}'],
+  database: 'wanted_pre_onboarding.db',
+  synchronize: true, //! set 'false' in production
+  autoLoadEntities: true,
+  logging: true,
 };

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { JobEntity } from 'src/api/job/entities/job.entity';
+import { JobEntity } from '../../job/entities/job.entity';
 import {
   BaseEntity,
   Column,
