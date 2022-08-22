@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { JobDto } from './dtos/job.dto';
 import { JobEntity } from './entities/job.entity';
 
 @Injectable()
@@ -14,6 +15,11 @@ export class JobService {
     const jobs = await this.jobRepository.find({
       relations: ['company'],
     });
-    return jobs;
+    return jobs.map((job) => {
+      return new JobDto(job);
+    });
+
+    // console.log(result);
+    // return result;
   }
 }
