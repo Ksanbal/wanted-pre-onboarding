@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { JobEntity } from 'src/api/job/entities/job.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({
   name: 'COMPANY',
@@ -44,4 +51,9 @@ export class CompanyEntity extends BaseEntity {
   @IsNotEmpty()
   @Column({ type: 'varchar', comment: '지역', nullable: false })
   region: string;
+
+  @OneToMany(() => JobEntity, (job: JobEntity) => job.company, {
+    cascade: true,
+  })
+  jobs: JobEntity[];
 }

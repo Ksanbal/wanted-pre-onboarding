@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
+import { ApplyEntity } from 'src/api/apply/entities/apply.entity';
 import { CompanyEntity } from 'src/api/company/entities/company.entity';
 import {
   BaseEntity,
@@ -7,6 +8,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -23,16 +25,14 @@ export class JobEntity extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  // @IsNumber()
-  // @Column({ type: 'int', comment: '기업 id', nullable: false })
   @ManyToOne(() => CompanyEntity, (company: CompanyEntity) => company.id, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({
-    name: 'companyId',
+    name: 'company_id',
     referencedColumnName: 'id',
   })
-  companyId: number;
+  company: number;
 
   @IsString()
   @Column({ type: 'varchar', comment: '채용포지션', nullable: false })
@@ -49,4 +49,9 @@ export class JobEntity extends BaseEntity {
   @IsString()
   @Column({ type: 'varchar', comment: '사용기술', nullable: false })
   techStack: string;
+
+  @OneToMany(() => ApplyEntity, (apply: ApplyEntity) => apply.job, {
+    cascade: true,
+  })
+  applies: ApplyEntity[];
 }

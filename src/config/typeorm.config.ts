@@ -1,4 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ApplyEntity } from 'src/api/apply/entities/apply.entity';
 import { CompanyEntity } from 'src/api/company/entities/company.entity';
 import { JobEntity } from 'src/api/job/entities/job.entity';
 import { UserEntity } from 'src/api/user/entities/user.entity';
@@ -8,7 +9,7 @@ export const typeOrmModuleOptions = {
   useFactory: async (): Promise<TypeOrmModuleOptions> => ({
     namingStrategy: new SnakeNamingStrategy(),
     type: 'sqlite',
-    entities: [UserEntity, CompanyEntity, JobEntity],
+    entities: [UserEntity, CompanyEntity, JobEntity, ApplyEntity],
     database: 'wanted_pre_onboarding.db',
     synchronize: true, //! set 'false' in production
     autoLoadEntities: true,
