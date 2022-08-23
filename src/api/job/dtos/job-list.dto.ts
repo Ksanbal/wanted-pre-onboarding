@@ -1,8 +1,8 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { JobEntity } from '../entities/job.entity';
 
-export class JobDto extends OmitType(JobEntity, ['company']) {
+export class JobListDto extends OmitType(JobEntity, ['content', 'company']) {
   @ApiProperty({
     example: '원티드랩',
     description: '회사명',
@@ -27,15 +27,6 @@ export class JobDto extends OmitType(JobEntity, ['company']) {
   @IsString()
   region: string;
 
-  // [] 회사가 올린 다른 채용공고
-  // @ApiProperty({
-  //   example: ['채용공고_id', '채용공고_id', '...'],
-  //   description: '회사가 올린 다른 채용공고',
-  //   required: false,
-  // })
-  // @IsArray()
-  // otherJobs: number[];
-
   constructor(job: JobEntity) {
     super();
     this.id = job.id;
@@ -45,6 +36,5 @@ export class JobDto extends OmitType(JobEntity, ['company']) {
     this.recruitPosition = job.recruitPosition;
     this.recruitBonus = job.recruitBonus;
     this.techStack = job.techStack;
-    this.content = job.content;
   }
 }
