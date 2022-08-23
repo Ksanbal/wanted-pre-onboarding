@@ -1,5 +1,15 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { HttpExceptionDto } from './../../common/dtos/exception.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { IsNumber, isNumber } from 'class-validator';
+import { JobCreateDto } from './dtos/job-create.dto';
 import { JobListDto } from './dtos/job-list.dto';
 import { JobDto } from './dtos/job.dto';
 import { JobService } from './job.service';
@@ -25,8 +35,17 @@ export class JobController {
     status: 200,
     type: JobDto,
   })
-  async get(@Param('id') id: number) {
-    console.log(typeof id);
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    type: HttpExceptionDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    type: HttpExceptionDto,
+  })
+  async get(@Param('id', ParseIntPipe) id: number) {
     return this.jobService.getOne(id);
   }
 }
