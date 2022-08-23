@@ -1,3 +1,4 @@
+import { JobPatchDto } from './dtos/job-patch.dto';
 import { CompanyEntity } from './../company/entities/company.entity';
 import { JobDto } from './dtos/job.dto';
 import { Injectable, HttpException } from '@nestjs/common';
@@ -55,5 +56,20 @@ export class JobService {
     }
 
     return new JobDto(job[0]);
+  }
+
+  async patchOne(id: number, patchDto: JobPatchDto) {
+    const [_, len] = await this.jobRepository.findAndCount({
+      where: {
+        id,
+      },
+      relations: ['company'],
+    });
+
+    if (len < 1) {
+      throw new HttpException('Not found', 404);
+    }
+
+    await this.jobRepository.update({ id }, patchDto);
   }
 }

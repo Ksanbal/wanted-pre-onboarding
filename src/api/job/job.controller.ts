@@ -1,3 +1,4 @@
+import { JobPatchDto } from './dtos/job-patch.dto';
 import { HttpExceptionDto } from './../../common/dtos/exception.dto';
 import {
   Body,
@@ -5,6 +6,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -67,5 +69,27 @@ export class JobController {
   })
   async get(@Param('id', ParseIntPipe) id: number) {
     return this.jobService.getOne(id);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: '채용공고 수정' })
+  @ApiResponse({
+    status: 200,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    type: HttpExceptionDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    type: HttpExceptionDto,
+  })
+  async patch(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchDto: JobPatchDto,
+  ) {
+    return this.jobService.patchOne(id, patchDto);
   }
 }
