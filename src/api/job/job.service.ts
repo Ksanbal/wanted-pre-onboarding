@@ -44,14 +44,14 @@ export class JobService {
   }
 
   async getOne(id: number) {
-    const job = await this.jobRepository.find({
+    const [job, len] = await this.jobRepository.findAndCount({
       where: {
         id,
       },
       relations: ['company'],
     });
 
-    if (job.length < 1) {
+    if (len < 1) {
       throw new HttpException('Not found', 404);
     }
 
