@@ -19,6 +19,26 @@ import { JobService } from './job.service';
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
+  @Post()
+  @ApiOperation({ summary: '채용공고 등록' })
+  @ApiResponse({
+    status: 201,
+    description: 'Created',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    type: HttpExceptionDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    type: HttpExceptionDto,
+  })
+  async create(@Body() createDto: JobCreateDto) {
+    return this.jobService.create(createDto);
+  }
+
   @Get()
   @ApiOperation({ summary: '채용공고 목록' })
   @ApiResponse({

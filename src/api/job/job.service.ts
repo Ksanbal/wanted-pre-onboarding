@@ -1,3 +1,4 @@
+import { CompanyEntity } from './../company/entities/company.entity';
 import { JobDto } from './dtos/job.dto';
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +12,26 @@ export class JobService {
   constructor(
     @InjectRepository(JobEntity)
     private readonly jobRepository: Repository<JobEntity>,
+    @InjectRepository(CompanyEntity)
+    private readonly companyRepository: Repository<CompanyEntity>,
   ) {}
+
+  async create(createDto: JobCreateDto) {
+    // [] company 찾기
+    const { companyId } = createDto;
+
+    const company = await this.companyRepository.find({
+      where: { id: companyId },
+    });
+    if (company.length < 1) {
+      throw new HttpException('Not found', 404);
+    }
+
+    const newJob = JobEntity.create(createDto);
+    newJob.company = company[0];
+    console.log(newJob);
+    await this.jobRepository.save(newJob);
+  }
 
   async getList() {
     const jobs = await this.jobRepository.find({
