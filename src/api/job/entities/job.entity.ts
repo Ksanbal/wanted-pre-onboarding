@@ -45,7 +45,7 @@ export class JobEntity extends BaseEntity {
   company: CompanyEntity;
 
   @ApiProperty({
-    example: '백엔드',
+    example: '데브옵스 주니어 개발자',
     description: '채용 포지션',
     required: true,
   })
@@ -54,7 +54,7 @@ export class JobEntity extends BaseEntity {
   recruitPosition: string;
 
   @ApiProperty({
-    example: 500000,
+    example: 600000,
     description: '채용 보상금',
     required: true,
   })
@@ -63,7 +63,7 @@ export class JobEntity extends BaseEntity {
   recruitBonus: number;
 
   @ApiProperty({
-    example: '원티드랩에서 백엔드 주니어 개발자를 채용합니다. 자격요건은..',
+    example: '원티드랩에서 데브옵스 주니어 개발자를 채용합니다. 자격요건은..',
     description: '채용 내용',
     required: true,
   })
@@ -72,7 +72,7 @@ export class JobEntity extends BaseEntity {
   content: string;
 
   @ApiProperty({
-    example: 'NodeJS',
+    example: 'Kubernetes',
     description: '사용기술',
     required: true,
   })
