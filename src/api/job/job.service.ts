@@ -51,14 +51,14 @@ export class JobService {
   }
 
   async getOne(id: number) {
-    const [job, len] = await this.jobRepository.findAndCount({
+    const job = await this.jobRepository.find({
       where: {
         id,
       },
       relations: ['company'],
     });
 
-    if (len < 1) {
+    if (job.length < 1) {
       throw new HttpException('Not found', 404);
     }
 
@@ -66,14 +66,13 @@ export class JobService {
   }
 
   async patchOne(id: number, patchDto: JobPatchDto) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, len] = await this.jobRepository.findAndCount({
+    const jobCount = await this.jobRepository.count({
       where: {
         id,
       },
     });
 
-    if (len < 1) {
+    if (jobCount < 1) {
       throw new HttpException('Not found', 404);
     }
 
@@ -81,14 +80,13 @@ export class JobService {
   }
 
   async deleteOne(id: number) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, len] = await this.jobRepository.findAndCount({
+    const jobCount = await this.jobRepository.count({
       where: {
         id,
       },
     });
 
-    if (len < 1) {
+    if (jobCount < 1) {
       throw new HttpException('Not found', 404);
     }
 
