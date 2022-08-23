@@ -1,3 +1,5 @@
+import { ApplyEntity } from './../apply/entities/apply.entity';
+import { UserEntity } from './../user/entities/user.entity';
 import { JobPatchDto } from './dtos/job-patch.dto';
 import { CompanyEntity } from './../company/entities/company.entity';
 import { JobDto } from './dtos/job.dto';
@@ -7,6 +9,7 @@ import { Repository } from 'typeorm';
 import { JobListDto } from './dtos/job-list.dto';
 import { JobEntity } from './entities/job.entity';
 import { JobCreateDto } from './dtos/job-create.dto';
+import { JobApplyDto } from './dtos/job-apply.dto';
 
 @Injectable()
 export class JobService {
@@ -15,6 +18,10 @@ export class JobService {
     private readonly jobRepository: Repository<JobEntity>,
     @InjectRepository(CompanyEntity)
     private readonly companyRepository: Repository<CompanyEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ApplyEntity)
+    private readonly applyRepository: Repository<ApplyEntity>,
   ) {}
 
   async create(createDto: JobCreateDto) {
@@ -84,5 +91,42 @@ export class JobService {
     }
 
     await this.jobRepository.delete({ id });
+  }
+
+  async apply(id: number, applyDto: JobApplyDto) {
+    const job = await this.jobRepository.find({
+      where: {
+        id,
+      },
+    });
+    if (job.length < 1) {
+      throw new HttpException('Not found', 404);
+    }
+
+    // [x] user 정보 가져오기
+    const { userId } = applyDto;
+    const user = await this.userRepository.find({
+      where: {
+        id: userId,
+      },
+    });
+    if (user.length < 1) {
+      throw new HttpException('Not found', 404);
+    }
+
+    // [] 이미 지원한 적 있는지 체크
+    const applyCount = await this.applyRepository.count({
+      where: {
+        job: { id: id },
+        user: { id: userId },
+      },
+    });
+    if (applyCount > 0) throw new HttpException('이미 지원하였습니다', 202);
+
+    const newApply = new ApplyEntity();
+    newApply.job = job[0];
+    newApply.user = user[0];
+
+    await this.applyRepository.save(newApply);
   }
 }

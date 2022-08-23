@@ -1,3 +1,4 @@
+import { JobApplyDto } from './dtos/job-apply.dto';
 import { JobPatchDto } from './dtos/job-patch.dto';
 import { HttpExceptionDto } from './../../common/dtos/exception.dto';
 import {
@@ -12,7 +13,6 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { IsNumber, isNumber } from 'class-validator';
 import { JobCreateDto } from './dtos/job-create.dto';
 import { JobListDto } from './dtos/job-list.dto';
 import { JobDto } from './dtos/job.dto';
@@ -108,5 +108,32 @@ export class JobController {
   })
   async delete(@Param('id', ParseIntPipe) id: number) {
     return this.jobService.deleteOne(id);
+  }
+
+  @Post(':id/apply')
+  @ApiOperation({ summary: '채용공고 지원' })
+  @ApiResponse({
+    status: 201,
+  })
+  @ApiResponse({
+    status: 202,
+    description: '이미 지원하였습니다.',
+    type: HttpExceptionDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request',
+    type: HttpExceptionDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    type: HttpExceptionDto,
+  })
+  async apply(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() applyDto: JobApplyDto,
+  ) {
+    return this.jobService.apply(id, applyDto);
   }
 }
