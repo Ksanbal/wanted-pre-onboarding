@@ -5,7 +5,7 @@ import { CompanyEntity } from './../company/entities/company.entity';
 import { JobDto } from './dtos/job.dto';
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { JobListDto } from './dtos/job-list.dto';
 import { JobEntity } from './entities/job.entity';
 import { JobCreateDto } from './dtos/job-create.dto';
@@ -62,7 +62,20 @@ export class JobService {
       throw new HttpException('Not found', 404);
     }
 
-    return new JobDto(job[0]);
+    // [x] 회사가 올린 다른 채용공고
+    const companyJobs = await this.jobRepository.find({
+      select: ['id'],
+      where: {
+        id: Not(id),
+        company: { id: job[0].company.id },
+      },
+    });
+
+    const result = new JobDto(job[0]);
+    result.otherJobs = companyJobs.map((cjob) => {
+      return cjob.id;
+    });
+    return result;
   }
 
   async patchOne(id: number, patchDto: JobPatchDto) {

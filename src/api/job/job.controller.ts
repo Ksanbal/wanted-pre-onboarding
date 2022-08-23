@@ -47,7 +47,7 @@ export class JobController {
   @ApiOperation({ summary: '채용공고 목록' })
   @ApiResponse({
     status: 200,
-    type: JobListDto,
+    type: [JobListDto],
   })
   async getList(): Promise<JobListDto[]> {
     return this.jobService.getList();

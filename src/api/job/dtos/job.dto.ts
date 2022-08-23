@@ -28,13 +28,13 @@ export class JobDto extends OmitType(JobEntity, ['company']) {
   region: string;
 
   // [] 회사가 올린 다른 채용공고
-  // @ApiProperty({
-  //   example: ['채용공고_id', '채용공고_id', '...'],
-  //   description: '회사가 올린 다른 채용공고',
-  //   required: false,
-  // })
-  // @IsArray()
-  // otherJobs: number[];
+  @ApiProperty({
+    example: ['채용공고_id', '채용공고_id', '...'],
+    description: '회사가 올린 다른 채용공고',
+    required: false,
+  })
+  @IsArray()
+  otherJobs: number[];
 
   constructor(job: JobEntity) {
     super();
