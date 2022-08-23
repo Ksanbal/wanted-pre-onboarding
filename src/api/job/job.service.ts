@@ -66,6 +66,7 @@ export class JobService {
   }
 
   async patchOne(id: number, patchDto: JobPatchDto) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, len] = await this.jobRepository.findAndCount({
       where: {
         id,
@@ -80,6 +81,7 @@ export class JobService {
   }
 
   async deleteOne(id: number) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, len] = await this.jobRepository.findAndCount({
       where: {
         id,
