@@ -5,11 +5,12 @@ import { CompanyEntity } from './../company/entities/company.entity';
 import { JobDto } from './dtos/job.dto';
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import { JobListDto } from './dtos/job-list.dto';
 import { JobEntity } from './entities/job.entity';
 import { JobCreateDto } from './dtos/job-create.dto';
 import { JobApplyDto } from './dtos/job-apply.dto';
+import { JobListQueryDto } from './dtos/job-list-query.dto';
 
 @Injectable()
 export class JobService {
@@ -25,7 +26,7 @@ export class JobService {
   ) {}
 
   async create(createDto: JobCreateDto) {
-    // [] company 찾기
+    // [x] company 찾기
     const { companyId } = createDto;
 
     const company = await this.companyRepository.find({
@@ -37,14 +38,44 @@ export class JobService {
 
     const newJob = JobEntity.create(createDto);
     newJob.company = company[0];
-    console.log(newJob);
     await this.jobRepository.save(newJob);
   }
 
-  async getList() {
-    const jobs = await this.jobRepository.find({
-      relations: ['company'],
-    });
+  async getList(query: JobListQueryDto) {
+    const { search } = query;
+
+    let jobs;
+    if (search === undefined) {
+      jobs = await this.jobRepository.find({
+        relations: ['company'],
+      });
+    } else {
+      jobs = await this.jobRepository.find({
+        where: [
+          {
+            company: [
+              {
+                name: Like(`%${search}%`),
+              },
+              {
+                region: Like(`%${search}%`),
+              },
+              {
+                country: Like(`%${search}%`),
+              },
+            ],
+          },
+          {
+            recruitPosition: Like(`%${search}%`),
+          },
+          {
+            techStack: Like(`%${search}%`),
+          },
+        ],
+        relations: ['company'],
+      });
+    }
+
     return jobs.map((job) => {
       return new JobListDto(job);
     });

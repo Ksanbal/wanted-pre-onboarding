@@ -11,12 +11,14 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JobCreateDto } from './dtos/job-create.dto';
 import { JobListDto } from './dtos/job-list.dto';
 import { JobDto } from './dtos/job.dto';
 import { JobService } from './job.service';
+import { JobListQueryDto } from './dtos/job-list-query.dto';
 
 @ApiTags('job')
 @Controller('job')
@@ -49,8 +51,8 @@ export class JobController {
     status: 200,
     type: [JobListDto],
   })
-  async getList(): Promise<JobListDto[]> {
-    return this.jobService.getList();
+  async getList(@Query() query: JobListQueryDto) {
+    return this.jobService.getList(query);
   }
 
   @Get(':id')
