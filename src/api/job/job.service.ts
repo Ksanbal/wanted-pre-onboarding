@@ -63,7 +63,6 @@ export class JobService {
       where: {
         id,
       },
-      relations: ['company'],
     });
 
     if (len < 1) {
@@ -71,5 +70,19 @@ export class JobService {
     }
 
     await this.jobRepository.update({ id }, patchDto);
+  }
+
+  async deleteOne(id: number) {
+    const [_, len] = await this.jobRepository.findAndCount({
+      where: {
+        id,
+      },
+    });
+
+    if (len < 1) {
+      throw new HttpException('Not found', 404);
+    }
+
+    await this.jobRepository.delete({ id });
   }
 }

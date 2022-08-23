@@ -3,7 +3,9 @@ import { HttpExceptionDto } from './../../common/dtos/exception.dto';
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
   Patch,
@@ -91,5 +93,20 @@ export class JobController {
     @Body() patchDto: JobPatchDto,
   ) {
     return this.jobService.patchOne(id, patchDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  @ApiOperation({ summary: '채용공고 삭제' })
+  @ApiResponse({
+    status: 204,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+    type: HttpExceptionDto,
+  })
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return this.jobService.deleteOne(id);
   }
 }
